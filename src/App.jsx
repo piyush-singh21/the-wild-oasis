@@ -9,6 +9,8 @@ import Login from "./pages/Login";
 import PageNotFound from "./pages/PageNotFound";
 import GlobalStyles from "./styles/GlobalStyles"
 import AppLayout from "./ui/AppLayout";
+import { IconContext } from "react-icons/lib";
+
 function App() {
   return (
     <>
@@ -28,7 +30,7 @@ function App() {
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </BrowserRouter>
-    </>
+    </ >
   )
 }
 export default App;
