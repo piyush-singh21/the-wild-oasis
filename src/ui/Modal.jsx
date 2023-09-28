@@ -1,4 +1,4 @@
-import { cloneElement, createContext, useContext, useState } from "react";
+import { cloneElement, createContext, useContext, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { HiXMark } from "react-icons/hi2";
 import styled from "styled-components";
@@ -54,6 +54,7 @@ const Button = styled.button`
 
 const ModalContext = createContext();
 function Modal({ children }) {
+
   const [openName, setOpenName] = useState("");
   const close = () => setOpenName("");
   const open = setOpenName;
@@ -70,11 +71,25 @@ function Open({ children, opens: opensWindowName }) {
   );
 }
 function Window({ children, name }) {
+  const ref = useRef();
   const { openName, close } = useContext(ModalContext);
+  useEffect(
+    function () {
+      function handleClick(e) {
+        if (ref.current && !ref.current.contains(e.target)) {
+          close();
+          console.log("click");
+
+        }
+      }
+      // true for capturing phase
+      document.addEventListener("click", handleClick, true);
+      return () => document.removeEventListener("click", handleClick, true);
+    }, [close]);
   if (name !== openName) return null;
   return createPortal(
-    <Overlay>
-      <StyledModal>
+    <Overlay >
+      <StyledModal ref={ref}>
         <Button>
           <HiXMark onClick={close} />
         </Button>
