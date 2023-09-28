@@ -53,7 +53,7 @@ const Button = styled.button`
 
 
 function Modal({ children, onClose }) {
-  return (
+  return createPortal(
     <Overlay>
       <StyledModal>
         <Button>
@@ -63,7 +63,8 @@ function Modal({ children, onClose }) {
           {children}
         </div>
       </StyledModal>
-    </Overlay>
+    </Overlay>,
+    document.body
   )
 }
 
