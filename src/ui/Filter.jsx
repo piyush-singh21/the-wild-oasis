@@ -41,7 +41,6 @@ function Filter({ filterField, fieldOption }) {
     setSearchParams(searchParams);
   }
   const filterValue = searchParams.get(filterField) || fieldOption.at(0).value;
-  console.log(filterValue);
   return (
     <StyledFilter>
       {fieldOption.map((option) => (
@@ -49,6 +48,7 @@ function Filter({ filterField, fieldOption }) {
           onClick={() => handleClick(option.value)}
           key={option.value}
           active={filterValue === option.value}
+          disabled={filterValue === option.value}
         >
           {option.label}
         </FilterButton>
