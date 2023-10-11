@@ -13,8 +13,8 @@ export function useBookings() {
       ? null
       : { field: "status", value: filterValue, method: "eq" };
   // SORT
-  const sortByRaw = searchParams.get("sortBy") || "startDate-desc";
-  const [field, direction] = sortByRaw.split("-");
+  const sortByRow = searchParams.get("sortBy") || "startDate-desc";
+  const [field, direction] = sortByRow.split("-");
   const sortBy = { field, direction };
   // PAGINATION
   const page = !searchParams.get("page") ? 1 : Number(searchParams.get("page"));
