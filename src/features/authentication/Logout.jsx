@@ -10,8 +10,7 @@ function Logout() {
     <ButtonIcon disabled={isLoading} onClick={logout}>
       {!isLoading ? (
         <h2>
-          {" "}
-          <HiArrowRightOnRectangle /> Logout
+          <HiArrowRightOnRectangle />
         </h2>
       ) : (
         <SpinnerMini />
