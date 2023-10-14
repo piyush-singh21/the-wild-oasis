@@ -3,6 +3,7 @@ import Row from "../../ui/Row";
 import Spinner from "../../ui/Spinner";
 import Heading from "../../ui/Heading";
 import Tag from "../../ui/Tag";
+import Empty from "../../ui/Empty";
 import ButtonGroup from "../../ui/ButtonGroup";
 import Button from "../../ui/Button";
 import ButtonText from "../../ui/ButtonText";
@@ -32,6 +33,7 @@ function BookingDetail() {
   console.log(booking);
   const moveBack = useMoveBack();
   if (isLoading) return <Spinner />;
+  if (!booking) return <Empty resource="booking" />;
   const { status, id: bookingId } = booking;
   const statusToTagName = {
     unconfirmed: "blue",
