@@ -8,9 +8,9 @@ pipeline {
                     def port = 9000
                     def isRunning = bat(script: "powershell -Command \"Get-NetTCPConnection -LocalPort ${port}\"", returnStatus: true) == 0
                     if (isRunning) {
-                        // Stop and remove the running Docker container
-                        bat 'docker stop wild-oasis-cont || exit 0'
-                        bat 'docker rm wild-oasis-cont || exit 0'
+                        // Stop the running Docker container
+                        bat 'docker stop wild-oasis-cont || exit 0' // Ignore error if container doesn't exist
+                        bat 'docker rm wild-oasis-cont || exit 0'   // Ignore error if container doesn't exist
                     } else {
                         echo "No application is running on port ${port}."
                     }
@@ -20,13 +20,11 @@ pipeline {
         stage('Build') {
             steps {
                 // Pull latest code and build the application
-                dir('https://github.com/piyush-singh21/the-wild-oasis') { // Adjust to your actual code directory
-                    bat 'git pull origin master'
-                    // Uncomment these if you need to install dependencies and build
-                    // bat 'npm install'
-                    // bat 'npm run build'
-                    bat 'docker build -t wild-oasis .'
-                }
+                bat 'git pull origin master' // Adjust if needed
+                // Uncomment these if you need to install dependencies and build
+                // bat 'npm install' // Install dependencies
+                // bat 'npm run build' // Build the application
+                bat 'docker build -t wild-oasis .'
             }
         }
         stage('Run App') {
@@ -38,9 +36,11 @@ pipeline {
     }
     post {
         always {
+            // Cleanup actions, if necessary
             echo 'Pipeline finished.'
         }
         failure {
+            // Handle failures
             echo 'Pipeline failed!'
         }
     }
