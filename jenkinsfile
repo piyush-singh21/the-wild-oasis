@@ -1,0 +1,47 @@
+pipeline {
+    agent any
+    stages {
+        stage('Stop Existing App') {
+            steps {
+                script {
+                    // Check if the application is running on the specified port
+                    def port = 9000
+                    def isRunning = bat(script: "powershell -Command \"Get-NetTCPConnection -LocalPort ${port}\"", returnStatus: true) == 0
+                    if (isRunning) {
+                        // Stop the running Docker container
+                        bat 'docker stop wild-oasis-cont || exit 0' // Ignore error if container doesn't exist
+                        bat 'docker rm wild-oasis-cont || exit 0'   // Ignore error if container doesn't exist
+                    } else {
+                        echo "No application is running on port ${port}."
+                    }
+                }
+            }
+        }
+        stage('Build') {
+            steps {
+                // Pull latest code and build the application
+                bat 'git pull origin master' // Adjust if needed
+                // Uncomment these if you need to install dependencies and build
+                // bat 'npm install' // Install dependencies
+                // bat 'npm run build' // Build the application
+                bat 'docker build -t wild-oasis .'
+            }
+        }
+        stage('Run App') {
+            steps {
+                // Start the application again
+                bat 'docker run --name wild-oasis-cont -d -p 9000:8080 wild-oasis'
+            }
+        }
+    }
+    post {
+        always {
+            // Cleanup actions, if necessary
+            echo 'Pipeline finished.'
+        }
+        failure {
+            // Handle failures
+            echo 'Pipeline failed!'
+        }
+    }
+}
